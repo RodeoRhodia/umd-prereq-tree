@@ -8,6 +8,7 @@ const PrereqTree = ({ nodes, edges }) => {
         maxHeight={window.innerHeight}
         nodes={nodes}
         edges={edges}
+        direction={'UP'}
       />
     );
 }
