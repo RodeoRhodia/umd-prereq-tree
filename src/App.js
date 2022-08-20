@@ -13,7 +13,6 @@ function App() {
     async function fetchGraph() {
       try {
         let [nodesList, edgesList] = await buildGraph(rootCourse);
-  
         setNodes(nodesList);
         setEdges(edgesList);
         setIsGraphBuilt(true);
@@ -25,7 +24,7 @@ function App() {
 
     if (rootCourse) {
       fetchGraph();
-    }  
+    }
   }, [rootCourse]);
 
 
@@ -36,7 +35,7 @@ function App() {
         value="Set Root Course"
         onClick={() => {
           console.log('BUTTON CLICKED');
-          setRootCourse('CMSC420');
+          setRootCourse('CMSC451');
       }} />
     { rootCourse && <h2> Prereq Tree for: { rootCourse } </h2>}
     { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
