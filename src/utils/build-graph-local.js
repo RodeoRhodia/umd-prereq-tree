@@ -1,5 +1,13 @@
 import parseCourseRelationships from './parse-course-rels.js';
 
+// Graphs are made of nodes and edges, all helper methods in this file can access it.
+let nodes = [];
+let edges = [];
+
+// instantiate sets to prevent any duplicate nodes or edges
+let registeredNodes = new Set();
+let registeredEdges = new Set();
+
 /**
  *
  * @param {string} rootCourse 
@@ -27,17 +35,14 @@ export async function buildGraph(rootCourse) {
 
     // build course prereq map
     const coursePrereqMap = await buildCoursePrereqMap(url);
-    
-    let nodes = [];
-    let edges = [];
 
     function dfs(prev, curr) {
         if (curr) {
-            nodes.push(buildNode(curr));
+            buildNode(curr);
         }
         
         if (prev) {
-            edges.push(buildEdge(curr, prev));
+            buildEdge(curr, prev);
         }
 
         let relationships = coursePrereqMap.get(curr);
@@ -55,16 +60,16 @@ export async function buildGraph(rootCourse) {
         // search pickOneFromEach
         for (let prereqCluster of relationships.pickOneFromEach) {
             let nodeId = prereqCluster.join('or');
-            nodes.push(buildNode(nodeId));
-            edges.push(buildEdge(nodeId, curr));
+            buildNode(nodeId);
+            buildEdge(nodeId, curr);
         }
 
         // search pickTwoFromEach
         let pickTwoPrereqs = relationships.pickTwoFromEach;
         if (pickTwoPrereqs.length > 0) {
             let nodeId = pickTwoPrereqs.join('two');
-            nodes.push(buildNode(nodeId));
-            edges.push(buildEdge(nodeId, curr));    
+            buildNode(nodeId);
+            buildEdge(nodeId, curr);    
         }
     }
 
@@ -101,16 +106,28 @@ async function buildCoursePrereqMap(url) { // department param will not used for
 }
 
 function buildNode(courseId) {
-    return {
-        id: courseId,
-        text: courseId
+    if (!registeredNodes.has(courseId)) {
+        let node = {
+            id: courseId,
+            text: courseId
+        };
+
+        nodes.push(node);
+        registeredNodes.add(courseId);
     }
 }
 
 function buildEdge(prereq, course) {
-    return {
-        id: `${prereq}-${course}`,
-        from: prereq,
-        to: course
+    let edgeId = `${prereq}-${course}`; 
+
+    if (!registeredEdges.has(edgeId)) {
+        let edge = {
+            id: edgeId,
+            from: prereq,
+            to: course
+        }
+
+        edges.push(edge);
+        registeredEdges.add(edgeId);
     }
 }
