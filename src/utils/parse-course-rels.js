@@ -84,7 +84,7 @@ function parsePickTwoFromEach(str) {
   let pickTwoFromEach = [];
 
   let start = str.indexOf('2 courses from');
-  if (start != -1) {
+  if (start !== -1) {
       let end = str.indexOf(';', start);
 
       let strSnippet = str.slice(start + 16, end - 1);
