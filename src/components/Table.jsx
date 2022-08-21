@@ -13,6 +13,7 @@ import React, { Fragment } from 'react';
 import './Table.css';
 
 const Table = ({ list, colNames, typeOfId }) => {
+
   return (
     <div>
       {list.length > 0 && (
