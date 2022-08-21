@@ -1,8 +1,22 @@
-import { useState, useEffect } from "react";
-import PrereqTree from "./components/PrereqTree";
+import { Fragment, useState, useEffect } from "react";
 import { buildGraph } from './utils/build-graph-local.js';
+import PrereqTree from "./components/PrereqTree";
+import BasicSelect from './components/BasicSelect.jsx';
+import Table from './components/Table.jsx';
+import "./index.css";
 
 function App() {
+  /* Component for choosing a department */
+  const [letter, setLetter] = useState('A');
+
+  const departmentList = [
+    { deptId: 'AASP', deptName: 'African American Studies' },
+    { deptId: 'AAST', deptName: 'Asian American Studies' },
+    { deptId: 'AGNR', deptName: 'Agriculture and Natural Resources' }
+  ];
+
+  const colNames = ['Dept. Id', 'Department']
+
   /* Component for Pre-requisite Tree */
   const [rootCourse, setRootCourse] = useState(null);
   const [nodes, setNodes] = useState(null);
@@ -27,7 +41,6 @@ function App() {
     }
   }, [rootCourse]);
 
-
   return (
   /* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */
   //  <div className="container">
@@ -42,9 +55,11 @@ function App() {
   //  { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
   //  </div>
 
-    <div>
-      <h1>Testing</h1>
-    </div>
+    <Fragment>
+      <h1> {letter}</h1>
+      <BasicSelect firstLetter={letter} changeLetter={letter => setLetter(letter)}/>
+      <Table list={departmentList} colNames={colNames} typeOfId={'deptId'}/>
+    </Fragment>
   );
 }
 
