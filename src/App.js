@@ -4,42 +4,36 @@ import PrereqTree from "./components/PrereqTree";
 import BasicSelect from './components/BasicSelect.jsx';
 import Table from './components/Table.jsx';
 import "./index.css";
+import useDepts from "./custom-hooks/useDepts.js";
 
 function App() {
-  /* Component for choosing a department */
+  /* Hooks for choosing a department */
   const [letter, setLetter] = useState('A');
-
-  const departmentList = [
-    { deptId: 'AASP', deptName: 'African American Studies' },
-    { deptId: 'AAST', deptName: 'Asian American Studies' },
-    { deptId: 'AGNR', deptName: 'Agriculture and Natural Resources' }
-  ];
-
-  const colNames = ['Dept. Id', 'Department']
+  const { departments, colNamesForDepts } = useDepts(letter);
 
   /* Component for Pre-requisite Tree */
-  const [rootCourse, setRootCourse] = useState(null);
-  const [nodes, setNodes] = useState(null);
-  const [edges, setEdges] = useState(null);
-  const [isGraphBuilt, setIsGraphBuilt] = useState(false);
+  // const [rootCourse, setRootCourse] = useState(null);
+  // const [nodes, setNodes] = useState(null);
+  // const [edges, setEdges] = useState(null);
+  // const [isGraphBuilt, setIsGraphBuilt] = useState(false);
 
-  useEffect(() => {
-    async function fetchGraph() {
-      try {
-        let [nodesList, edgesList] = await buildGraph(rootCourse);
-        setNodes(nodesList);
-        setEdges(edgesList);
-        setIsGraphBuilt(true);
-      } catch (error) {
-        console.log('error occurred');
-        console.log(error);
-      }
-    }
+  // useEffect(() => {
+  //   async function fetchGraph() {
+  //     try {
+  //       let [nodesList, edgesList] = await buildGraph(rootCourse);
+  //       setNodes(nodesList);
+  //       setEdges(edgesList);
+  //       setIsGraphBuilt(true);
+  //     } catch (error) {
+  //       console.log('error occurred');
+  //       console.log(error);
+  //     }
+  //   }
 
-    if (rootCourse) {
-      fetchGraph();
-    }
-  }, [rootCourse]);
+  //   if (rootCourse) {
+  //     fetchGraph();
+  //   }
+  // }, [rootCourse]);
 
   return (
   /* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */
@@ -58,7 +52,10 @@ function App() {
     <Fragment>
       <h1> {letter}</h1>
       <BasicSelect firstLetter={letter} changeLetter={letter => setLetter(letter)}/>
-      <Table list={departmentList} colNames={colNames} typeOfId={'deptId'}/>
+      <Table 
+        list={departments} 
+        colNames={colNamesForDepts} 
+        typeOfId={'dept_id'}/>
     </Fragment>
   );
 }
