@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import PrereqTree from "./PrereqTree";
+import PrereqTree from "./components/PrereqTree";
 import { buildGraph } from './utils/build-graph-local.js';
 
 function App() {
