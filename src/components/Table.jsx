@@ -31,7 +31,7 @@ const Table = ({ list, colNames, typeOfId, changeValueSelected }) => {
 
           <tbody>
             <Fragment>
-              {Object.values(list).map((obj, index) => (
+              {Object.values(list).map((obj) => (
                 <Fragment>
                   <tr>
                     <td>
@@ -51,6 +51,11 @@ const Table = ({ list, colNames, typeOfId, changeValueSelected }) => {
           </tbody>
         </table>
       )}
+      {list.length == 0 &&
+        <div id="no-elements" style={{padding: '100px'}}>
+          <p>No {colNames[1]} here</p>
+        </div>
+      }
     </div>
   );
 }
