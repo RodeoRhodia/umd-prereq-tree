@@ -4,13 +4,14 @@ import PrereqTree from "./components/PrereqTree";
 import BasicSelect from './components/BasicSelect.jsx';
 import Table from './components/Table.jsx';
 import "./index.css";
+import "./App.css";
 import useDepts from "./custom-hooks/useDepts.js";
 
 function App() {
   /* Hooks for choosing a department */
   const [letter, setLetter] = useState('A');
-  const { departments, colNamesForDepts } = useDepts(letter);
-
+  const { departments, colNamesForDepts, deptId } = useDepts(letter);
+  const [deptSelected, setDeptSelected] = useState('');
   /* Component for Pre-requisite Tree */
   // const [rootCourse, setRootCourse] = useState(null);
   // const [nodes, setNodes] = useState(null);
@@ -49,14 +50,24 @@ function App() {
   //  { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
   //  </div>
 
-    <Fragment>
-      <h1> {letter}</h1>
-      <BasicSelect firstLetter={letter} changeLetter={letter => setLetter(letter)}/>
-      <Table 
-        list={departments} 
-        colNames={colNamesForDepts} 
-        typeOfId={'dept_id'}/>
-    </Fragment>
+
+      <div className="App-Container">
+        <h1>Department Selected: {deptSelected}</h1>
+        <BasicSelect
+            firstLetter={letter}
+            changeLetter={letter => setLetter(letter)}
+          />
+        <div className="menu-container">
+        
+            <Table
+              list={departments}
+              colNames={colNamesForDepts}
+              typeOfId={deptId}
+              changeValueSelected={deptSelected => setDeptSelected(deptSelected)}
+            />
+        </div>
+      </div>
+   
   );
 }
 
