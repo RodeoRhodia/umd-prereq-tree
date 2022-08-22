@@ -3,22 +3,35 @@
 */
 
 .content-table {
+    box-sizing: border-box;
     /* more compact */
     border-collapse: collapse; 
+    display: block;
+    height: fit-content;
+    max-height: 400px;
+    overflow-y: scroll;
+    overflow-x: auto;
+
     /* space between top and bottom */
     margin: 25px 0;
   
     font-size: 0.9em;
-    min-width: 400px; /* Expand Cols */
-  
+    width: fit-content;
+    /* max-width: 450px; */
     border-radius: 5px 5px 0 0;
-    overflow: hidden;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     
 }
-  
+
+.content-table thead {
+    position: sticky;
+    top: 0px;
+    margin: 0 0 0 0;
+}
+
 .content-table thead tr {
     background-color: #e21833;
+    width: 450px;
     color: white;
     text-align: left;
     font-weight: bold;
