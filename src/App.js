@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { buildGraph } from './utils/build-graph-local.js';
+import { useState, useEffect } from "react";
+import { buildGraph } from './utils/build-graph.js';
 import PrereqTree from "./components/PrereqTree";
 import BasicSelect from './components/BasicSelect.jsx';
 import Table from './components/Table.jsx';
@@ -19,33 +19,32 @@ function App() {
 
   /* Hooks for choosing a course */
   const [isPending, setIsPending] = useState(true);
-  const { courses, colNamesForCourses, courseId } = useCourses(deptSelected, deptConfirmed, setIsPending);
+  const { courses, setCourses, colNamesForCourses, courseId } = useCourses(deptSelected, deptConfirmed, setIsPending);
   const [courseSelected, setCourseSelected] = useState(false);
   const [courseConfirmed, setCourseConfirmed] = useState(false);
   
   /* Component for Pre-requisite Tree */
-  // const [rootCourse, setRootCourse] = useState(null);
-  // const [nodes, setNodes] = useState(null);
-  // const [edges, setEdges] = useState(null);
-  // const [isGraphBuilt, setIsGraphBuilt] = useState(false);
+  const [nodes, setNodes] = useState(null);
+  const [edges, setEdges] = useState(null);
+  const [isGraphBuilt, setIsGraphBuilt] = useState(false);
 
-  // useEffect(() => {
-  //   async function fetchGraph() {
-  //     try {
-  //       let [nodesList, edgesList] = await buildGraph(rootCourse);
-  //       setNodes(nodesList);
-  //       setEdges(edgesList);
-  //       setIsGraphBuilt(true);
-  //     } catch (error) {
-  //       console.log('error occurred');
-  //       console.log(error);
-  //     }
-  //   }
+  useEffect(() => {
+    async function fetchGraph() {
+      try {
+        let [nodesList, edgesList] = await buildGraph(courseSelected, deptSelected);
+        setNodes(nodesList);
+        setEdges(edgesList);
+        setIsGraphBuilt(true);
+      } catch (error) {
+        console.log('error occurred');
+        console.log(error);
+      }
+    }
 
-  //   if (rootCourse) {
-  //     fetchGraph();
-  //   }
-  // }, [rootCourse]);
+    if (courseConfirmed) {
+      fetchGraph();
+    }
+  }, [courseConfirmed]);
 
   return (
     /* MENU TO SELECT A DEPARTMENT */
@@ -74,11 +73,13 @@ function App() {
 
         {/* LOADING TO RENDER COURSES MENU */}
         {isPending && deptConfirmed && 
-          <CircularProgress />
+          <div id="loadingcircle" style={{padding: '300px'}}>
+            <CircularProgress />
+          </div>
         }
     
         {/* MENU TO SELECT A COURSE */}
-        {courses &&
+        {courses && !courseConfirmed &&
           <div id="course-menu">
             <h2>Course Selected: {courseSelected}</h2>
             <Table
@@ -92,35 +93,35 @@ function App() {
             />
             <Button
               variant="contained"
+              style={{marginRight: '10px'}}
+              onClick={() => {
+                setCourses(null);
+                setDeptConfirmed(false);
+                setCourseConfirmed(false);
+                setCourseSelected(false);
+                setDeptSelected(null);
+                setIsPending(true);
+            }}>Back</Button>
+
+            <Button
+              variant="contained"
+              color={"success"}
               disabled={courseSelected ? false : true}
               onClick={async () => {
                 setCourseConfirmed(true);
-                console.log(courseSelected);
-              }           
-            }>
-            Build Prereq Tree 
-          </Button>
+                setCourseSelected(courseSelected);
+              }}>Build Prereq Tree </Button>
           </div>
         }
 
+        {/* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */}
         {deptConfirmed && courseConfirmed &&
-          <h1> prereq tree for { courseSelected } !</h1>
+          <div className="tree-container">
+          <h2>{ courseSelected }'s Prereq Tree</h2>
+          { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
+          </div>
         }
-
       </div>
-
-        /* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */
-  //  <div className="tree-container">
-  //    <input 
-  //      type="button"
-  //      value="Set Root Course"
-  //      onClick={() => {
-  //        console.log('BUTTON CLICKED');
-  //        setRootCourse('CMSC451');
-  //    }} />
-  //  { rootCourse && <h2> Prereq Tree for: { rootCourse } </h2>}
-  //  { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
-  //  </div>
   );
 }
 
