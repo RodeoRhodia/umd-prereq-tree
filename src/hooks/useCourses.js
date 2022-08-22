@@ -36,7 +36,7 @@ const useCourses = (department, deptConfirmed, setIsPending) => {
         }
     }, [deptConfirmed])
 
-    return { courses, colNamesForCourses, courseId };
+    return { courses, setCourses, colNamesForCourses, courseId };
 }
 
 export default useCourses;
