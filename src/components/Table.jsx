@@ -12,7 +12,7 @@
 import React, { Fragment } from 'react';
 import './Table.css';
 
-const Table = ({ list, colNames, typeOfId }) => {
+const Table = ({ list, colNames, typeOfId, changeValueSelected }) => {
 
   return (
     <div>
@@ -38,7 +38,8 @@ const Table = ({ list, colNames, typeOfId }) => {
                       <input 
                         type='radio' 
                         name={typeOfId} 
-                        onChange={(event) => console.log(obj[typeOfId])}/>
+                        onChange={() => changeValueSelected(obj[typeOfId])}
+                        />
                     </td>
                     {Object.values(obj).map((value) => (
                       <td>{value}</td>  
