@@ -13,9 +13,11 @@ import Select from '@mui/material/Select';
 import Menu from '@mui/material/Menu';
 
 export default function BasicSelect({firstLetter, changeLetter}) {
+
   const handleChange = (event) => {
     changeLetter(event.target.value);
   };
+
 
   const alphabetArr = [];
   for (let asciiCode = 97; asciiCode < 123; asciiCode++) {
@@ -24,8 +26,8 @@ export default function BasicSelect({firstLetter, changeLetter}) {
   }
 
   return (
-    <Box sx={{ minWidth: 120 }}>
-      <FormControl fullWidth>
+
+      <FormControl style={{minWidth: 130}}>
         <InputLabel id="demo-simple-select-label">Department Letter</InputLabel>
         <Select
           labelId="demo-simple-select-label"
@@ -33,6 +35,7 @@ export default function BasicSelect({firstLetter, changeLetter}) {
           value={firstLetter}
           label="Department Letter"
           onChange={handleChange}
+          autoWidth
         >
         {alphabetArr.map(letter => (
         <MenuItem value={letter} key={letter.charCodeAt(0)}>{letter}</MenuItem>
@@ -40,6 +43,5 @@ export default function BasicSelect({firstLetter, changeLetter}) {
 
         </Select>
       </FormControl>
-    </Box>
   );
 }
