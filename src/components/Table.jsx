@@ -13,7 +13,6 @@ import React, { Fragment } from 'react';
 import './Table.css';
 
 const Table = ({ list, colNames, typeOfId, changeValueSelected }) => {
-
   return (
     <div>
       {list.length > 0 && (
@@ -31,18 +30,18 @@ const Table = ({ list, colNames, typeOfId, changeValueSelected }) => {
 
           <tbody>
             <Fragment>
-              {Object.values(list).map((obj) => (
+              {Object.values(list).map((obj, index1) => (
                 <Fragment>
-                  <tr>
-                    <td>
+                  <tr >
+                    <td key={index1}>
                       <input 
                         type='radio' 
                         name={typeOfId} 
                         onChange={() => changeValueSelected(obj[typeOfId])}
                         />
                     </td>
-                    {Object.values(obj).map((value) => (
-                      <td>{value}</td>  
+                    {Object.values(obj).map((value, index2) => (
+                      <td key={index2}>{value}</td>  
                     ))}
                   </tr>
                 </Fragment>
