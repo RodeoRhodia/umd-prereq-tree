@@ -12,7 +12,7 @@ const Sidebar = () => {
           <h2>Maker</h2>
           <h4>By Lanz F.</h4>
 
-          <Button href="https://github.com/RodeoRhodia" 
+          <Button href="https://github.com/RodeoRhodia/umd-prereq-tree/" 
           target="_blank" 
           variant="contained" 
           size="large" 
