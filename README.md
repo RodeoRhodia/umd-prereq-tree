@@ -4,7 +4,7 @@ This repository is hosted on https://github.com/RodeoRhodia/umd-prereq-tree
 
 ## How To Use
 
-Visit the Demo: 
+Try out the app: https://umd-prereq-tree.vercel.app/ 
 
 ## Key Features
 * Developed a front-end app that collects all the prerequisites of a given course at University of Maryland.
