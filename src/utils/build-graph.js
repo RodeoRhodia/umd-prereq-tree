@@ -98,9 +98,21 @@ async function buildCoursePrereqMap(url) { // department param will not used for
 
 function buildNode(courseId, nodes, registeredNodes) {
     if (!registeredNodes.has(courseId)) {
+        let formattedCourseId = courseId;
+        let coursesInNode;
+        if (courseId.includes('or')) {
+            coursesInNode = courseId.split('or');
+            formattedCourseId = `P1:${coursesInNode.join(",")}`;
+
+        } else if (courseId.includes('two')) {
+
+            coursesInNode = courseId.split('two');
+            formattedCourseId = `P2:${coursesInNode.join(",")}`;
+        }
+
         let node = {
             id: courseId,
-            text: courseId
+            text: formattedCourseId
         };
 
         nodes.push(node);
