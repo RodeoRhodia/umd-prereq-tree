@@ -20,7 +20,7 @@ function App() {
   /* Hooks for choosing a course */
   const [isPending, setIsPending] = useState(true);
   const { courses, setCourses, colNamesForCourses, courseId } = useCourses(deptSelected, deptConfirmed, setIsPending);
-  const [courseSelected, setCourseSelected] = useState(false);
+  const [courseSelected, setCourseSelected] = useState(null);
   const [courseConfirmed, setCourseConfirmed] = useState(false);
   
   /* Component for Pre-requisite Tree */
@@ -88,7 +88,6 @@ function App() {
               typeOfId={courseId}
               changeValueSelected={courseSelected => {
                 setCourseSelected(courseSelected);
-                console.log(courseSelected);
               }}
             />
             <Button
@@ -101,7 +100,7 @@ function App() {
                 setCourseSelected(false);
                 setDeptSelected(null);
                 setIsPending(true);
-            }}>Back</Button>
+            }}>Back to departments</Button>
 
             <Button
               variant="contained"
@@ -109,7 +108,6 @@ function App() {
               disabled={courseSelected ? false : true}
               onClick={async () => {
                 setCourseConfirmed(true);
-                setCourseSelected(courseSelected);
               }}>Build Prereq Tree </Button>
           </div>
         }
@@ -118,6 +116,16 @@ function App() {
         {deptConfirmed && courseConfirmed &&
           <div className="tree-container">
           <h2>{ courseSelected }'s Prereq Tree</h2>
+          <Button
+              variant="contained"
+              style={{marginRight: '10px'}}
+              onClick={() => {
+                setCourseConfirmed(false);
+                setNodes(null);
+                setEdges(null);
+                setIsGraphBuilt(false);
+                setCourseSelected(null);
+            }}>Back to courses</Button>
           { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
           </div>
         }
