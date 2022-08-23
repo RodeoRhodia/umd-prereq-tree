@@ -9,6 +9,8 @@ import useDepts from "./hooks/useDepts.js";
 import useCourses from "./hooks/useCourses.js";
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
+import Sidebar from "./components/Sidebar.jsx";
+import StatusHeader from "./components/StatusHeader.jsx";
 
 function App() {
   /* Hooks for choosing a department */
@@ -23,7 +25,7 @@ function App() {
   const [courseSelected, setCourseSelected] = useState(null);
   const [courseConfirmed, setCourseConfirmed] = useState(false);
   
-  /* Component for Pre-requisite Tree */
+  /* Hooks for Pre-requisite Tree */
   const [nodes, setNodes] = useState(null);
   const [edges, setEdges] = useState(null);
   const [isGraphBuilt, setIsGraphBuilt] = useState(false);
@@ -49,86 +51,85 @@ function App() {
   return (
     /* MENU TO SELECT A DEPARTMENT */
       <div className="App-Container">
-        {!deptConfirmed &&
-          <div id="department-menu">
-              <h2>Department Selected: {deptSelected}</h2>
-              <BasicSelect
-                  firstLetter={letter}
-                  changeLetter={letter => setLetter(letter)}
-              />
+        <Sidebar />
+        <div className="MainContent-Container">
+          {!deptConfirmed &&
+            <div id="department-menu">
+                <StatusHeader description={'Department Selected: '} status={deptSelected}/>
+                <BasicSelect
+                    firstLetter={letter}
+                    changeLetter={letter => setLetter(letter)}
+                />
+                <Table
+                  list={departments}
+                  colNames={colNamesForDepts}
+                  typeOfId={deptId}
+                  changeValueSelected={deptSelected => setDeptSelected(deptSelected)}
+                />
+                <Button
+                  variant="contained"
+                  disabled={deptSelected ? false : true}
+                  onClick={async () => setDeptConfirmed(true)}>
+                  Continue
+                </Button>
+            </div>
+          }
+          {/* LOADING TO RENDER COURSES MENU */}
+          {isPending && deptConfirmed &&
+            <div id="loadingcircle" style={{padding: '300px'}}>
+              <CircularProgress />
+            </div>
+          }
+          {/* MENU TO SELECT A COURSE */}
+          {courses && !courseConfirmed &&
+            <div id="course-menu">
+              <StatusHeader description={'Course Selected: '} status={courseSelected}/>
               <Table
-                list={departments}
-                colNames={colNamesForDepts}
-                typeOfId={deptId}
-                changeValueSelected={deptSelected => setDeptSelected(deptSelected)}
+                list={courses}
+                colNames={colNamesForCourses}
+                typeOfId={courseId}
+                changeValueSelected={courseSelected => {
+                  setCourseSelected(courseSelected);
+                }}
               />
               <Button
                 variant="contained"
-                disabled={deptSelected ? false : true}
-                onClick={async () => setDeptConfirmed(true)}>
-                Continue 
-              </Button>
-          </div>
-        }
-
-        {/* LOADING TO RENDER COURSES MENU */}
-        {isPending && deptConfirmed && 
-          <div id="loadingcircle" style={{padding: '300px'}}>
-            <CircularProgress />
-          </div>
-        }
-    
-        {/* MENU TO SELECT A COURSE */}
-        {courses && !courseConfirmed &&
-          <div id="course-menu">
-            <h2>Course Selected: {courseSelected}</h2>
-            <Table
-              list={courses}
-              colNames={colNamesForCourses}
-              typeOfId={courseId}
-              changeValueSelected={courseSelected => {
-                setCourseSelected(courseSelected);
-              }}
-            />
+                style={{marginRight: '10px'}}
+                onClick={() => {
+                  setCourses(null);
+                  setDeptConfirmed(false);
+                  setCourseConfirmed(false);
+                  setCourseSelected(false);
+                  setDeptSelected(null);
+                  setIsPending(true);
+              }}>Back to departments</Button>
+              <Button
+                variant="contained"
+                color={"success"}
+                disabled={courseSelected ? false : true}
+                onClick={async () => {
+                  setCourseConfirmed(true);
+                }}>Build Prereq Tree </Button>
+            </div>
+          }
+          {/* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */}
+          {deptConfirmed && courseConfirmed &&
+            <div className="tree-container">
+            <StatusHeader description={'Prereq Tree of '} status={courseSelected}/>
             <Button
-              variant="contained"
-              style={{marginRight: '10px'}}
-              onClick={() => {
-                setCourses(null);
-                setDeptConfirmed(false);
-                setCourseConfirmed(false);
-                setCourseSelected(false);
-                setDeptSelected(null);
-                setIsPending(true);
-            }}>Back to departments</Button>
-
-            <Button
-              variant="contained"
-              color={"success"}
-              disabled={courseSelected ? false : true}
-              onClick={async () => {
-                setCourseConfirmed(true);
-              }}>Build Prereq Tree </Button>
-          </div>
-        }
-
-        {/* RENDER PRE-REQUISITE TREE WHEN ROOT COURSE HAS BEEN SET */}
-        {deptConfirmed && courseConfirmed &&
-          <div className="tree-container">
-          <h2>{ courseSelected }'s Prereq Tree</h2>
-          <Button
-              variant="contained"
-              style={{marginRight: '10px'}}
-              onClick={() => {
-                setCourseConfirmed(false);
-                setNodes(null);
-                setEdges(null);
-                setIsGraphBuilt(false);
-                setCourseSelected(null);
-            }}>Back to courses</Button>
-          { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
-          </div>
-        }
+                variant="contained"
+                style={{marginRight: '10px'}}
+                onClick={() => {
+                  setCourseConfirmed(false);
+                  setNodes(null);
+                  setEdges(null);
+                  setIsGraphBuilt(false);
+                  setCourseSelected(null);
+              }}>Back to courses</Button>
+            { isGraphBuilt && <PrereqTree nodes={nodes} edges={edges}/> }
+            </div>
+          }
+        </div>
       </div>
   );
 }
