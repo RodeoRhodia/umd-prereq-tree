@@ -1,15 +1,14 @@
 import parseCourseRelationships from './parse-course-rels.js';
 
-// Graphs are made of nodes and edges, all helper methods in this file can access it.
-let nodes = [];
-let edges = [];
-
-// instantiate sets to prevent any duplicate nodes or edges
-let registeredNodes = new Set();
-let registeredEdges = new Set();
-
-
 export async function buildGraph(rootCourse, department) {
+    // Graphs are made of nodes and edges, all helper methods in this file can access it.
+    let nodes = [];
+    let edges = [];
+
+    // instantiate sets to prevent any duplicate nodes or edges
+    let registeredNodes = new Set();
+    let registeredEdges = new Set();
+
     /**
      * build the url 
      */
@@ -25,11 +24,11 @@ export async function buildGraph(rootCourse, department) {
         }
 
         if (curr) {
-            buildNode(curr);
+            buildNode(curr, nodes, registeredNodes);
         }
         
         if (prev) {
-            buildEdge(curr, prev);
+            buildEdge(curr, prev, edges, registeredEdges);
         }
 
         let relationships = coursePrereqMap.get(curr);
@@ -47,16 +46,16 @@ export async function buildGraph(rootCourse, department) {
         // search pickOneFromEach
         for (let prereqCluster of relationships.pickOneFromEach) {
             let nodeId = prereqCluster.join('or');
-            buildNode(nodeId);
-            buildEdge(nodeId, curr);
+            buildNode(nodeId, nodes, registeredNodes);
+            buildEdge(nodeId, curr, edges, registeredEdges);
         }
 
         // search pickTwoFromEach
         let pickTwoPrereqs = relationships.pickTwoFromEach;
         if (pickTwoPrereqs.length > 0) {
             let nodeId = pickTwoPrereqs.join('two');
-            buildNode(nodeId);
-            buildEdge(nodeId, curr);    
+            buildNode(nodeId, nodes, registeredNodes);
+            buildEdge(nodeId, curr, edges, registeredEdges);    
         }
     }
 
@@ -97,7 +96,7 @@ async function buildCoursePrereqMap(url) { // department param will not used for
     return coursePrereqMap;
 }
 
-function buildNode(courseId) {
+function buildNode(courseId, nodes, registeredNodes) {
     if (!registeredNodes.has(courseId)) {
         let node = {
             id: courseId,
@@ -109,7 +108,7 @@ function buildNode(courseId) {
     }
 }
 
-function buildEdge(prereq, course) {
+function buildEdge(prereq, course, edges, registeredEdges) {
     let edgeId = `${prereq}-${course}`; 
 
     if (!registeredEdges.has(edgeId)) {
