@@ -4,6 +4,7 @@ This repository is hosted on https://github.com/RodeoRhodia/umd-prereq-tree
 
 ## How To Use
 
+Video Demo: https://www.youtube.com/watch?v=ErsjL1RtHMc
 Try out the app: https://umd-prereq-tree.vercel.app/ 
 
 ## Key Features
