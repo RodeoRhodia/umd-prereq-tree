@@ -1,4 +1,3 @@
-import { findSourceMap } from 'module';
 import fetch from 'node-fetch';
 import { getDepartments } from './departments.js';
 
