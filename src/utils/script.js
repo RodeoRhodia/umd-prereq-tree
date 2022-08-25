@@ -2,12 +2,6 @@ import { findSourceMap } from 'module';
 import fetch from 'node-fetch';
 import { getDepartments } from './departments.js';
 
-/**
- * Prints start and end in a delayed loop
- * 
- * start - first number
- * end - last number, exclusive
- */
 async function calculateTotalUmdCourses(departments) {
     let totalCourses = 0;
 
@@ -49,7 +43,3 @@ async function doWork() {
 }
 
 doWork();
-
-// delayedLoop(0, 5);
-// delayedLoop(getDepartments());
-// console.log(getDepartments());
