@@ -14,8 +14,11 @@ Try out the app: https://umd-prereq-tree.vercel.app/
 * The courses and prerequisites are then displayed as a flowchart.
 * In the prerequisite tree, you can click on a course for more details.
 
+## Extra feature
+* Calculate total courses offered in current semester. Run script, make sure to have node.js installed and its imports. https://github.com/RodeoRhodia/umd-prereq-tree/blob/main/src/utils/script.js
+
 ## Improvements in Future
-* Expand Prerequisite Tree if a course has many options for a prerequisite.
+* Expand Prerequisite Tree if a course has many options for a prerequisite. 
 
 ## Credits
 
